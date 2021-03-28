@@ -1,0 +1,5 @@
+buys_computer
+age <=30
+income medium
+student yes
+credit_rating fair
