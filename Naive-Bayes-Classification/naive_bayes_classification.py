@@ -13,7 +13,15 @@ def getAttributeProbabilities(predict, sample, classes, probability_classes, dat
         for att in attributes:
             if sample[att] == row[att]:
                 count[att][row[predict]] = count[att][row[predict]] + 1
-    att_count = { att: { c: { 'probability': count[att][c]/probability_classes[c]['count'], 'count': count[att][c] } for c in classes } for att in attributes }
+    att_count = {}
+    for att in attributes:
+        dic = {}
+        for c in classes:
+            dic[c] = { 
+                'probability': count[att][c]/probability_classes[c]['count'], 
+                'count': count[att][c] 
+            }
+        att_count[att] = dic
     return att_count
 
 def getClassProbability(predict, data, classes):
@@ -81,7 +89,7 @@ def main():
     attri_condit_probs = getAttributeProbabilities(predict, sample, classes, probability_classes, data, attributes)
     # print(attri_condit_probs)
     bayesian_classification = getBayesianClassification(probability_classes, attri_condit_probs)
-    print("Naive Bayes Classification: ", bayesian_classification)
+    print(f"Naive Bayes Classification for {predict}: {bayesian_classification}")
 
 if __name__ == "__main__":
     main()
