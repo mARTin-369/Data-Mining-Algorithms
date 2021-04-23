@@ -1,10 +1,10 @@
 def getBayesianClassification(probability_classes, attri_condit_probs):
-    bayesian_classification = []
+    bayesian_classification = {}
     for class_prob in probability_classes:
         probablity = probability_classes[class_prob]['probability']
         for attri_prob in attri_condit_probs:
             probablity = probablity*attri_condit_probs[attri_prob][class_prob]['probability']
-        bayesian_classification.append({ class_prob: probablity })
+        bayesian_classification[class_prob] = probablity
     return bayesian_classification
 
 def getAttributeProbabilities(predict, sample, classes, probability_classes, data, attributes):
@@ -13,15 +13,7 @@ def getAttributeProbabilities(predict, sample, classes, probability_classes, dat
         for att in attributes:
             if sample[att] == row[att]:
                 count[att][row[predict]] = count[att][row[predict]] + 1
-    att_count = {}
-    for att in attributes:
-        dic = {}
-        for c in classes:
-            dic[c] = { 
-                'probability': count[att][c]/probability_classes[c]['count'], 
-                'count': count[att][c] 
-            }
-        att_count[att] = dic
+    att_count = { att: { c: { 'probability': count[att][c]/probability_classes[c]['count'], 'count': count[att][c] } for c in classes } for att in attributes }
     return att_count
 
 def getClassProbability(predict, data, classes):
@@ -76,12 +68,13 @@ def getFileData(file_name):
     return file_data, header
 
 def main():
-    data_file = 'play_tennis.txt'
-    sample_file = 'sample2.txt'
+    data_file = input("Enter dataset file name: ")
+    sample_file = input("Enter sample file name: ")
     data, attributes = getFileData(data_file)
     predict, sample = getFileSample(sample_file)
     attributes.remove(predict)
     # print(attributes)
+
     classes = getClasses(data, predict)
     # print(classes)
     probability_classes = getClassProbability(predict, data, classes)
@@ -89,7 +82,14 @@ def main():
     attri_condit_probs = getAttributeProbabilities(predict, sample, classes, probability_classes, data, attributes)
     # print(attri_condit_probs)
     bayesian_classification = getBayesianClassification(probability_classes, attri_condit_probs)
-    print(f"Naive Bayes Classification for {predict}: {bayesian_classification}")
+    prediction = max(bayesian_classification, key=bayesian_classification.get)
 
+    print("\nNaive Bayes Classification: ")
+    print(f"Predict: {predict}")
+
+    for classify in bayesian_classification:
+        print(f"{classify}: {bayesian_classification[classify]}")
+    print(f"Prediction: {prediction}")
+    
 if __name__ == "__main__":
     main()
