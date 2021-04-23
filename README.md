@@ -1,4 +1,4 @@
-# Data-Mining-Algorithms
+# Data Mining Algorithms
 Find simple programs for Data Mining Algorithms here...
 
 - [Naive Bayes Classification](Naive-Bayes-Classification)
