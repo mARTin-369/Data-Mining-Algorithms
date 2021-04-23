@@ -58,12 +58,15 @@ def getFileData(file_name):
     return file_data, header
 
 def main():
-    data_file = 'data.txt'
+    data_file = input("Enter dataset file name: ")
     k = int(input("Enter number of clusters: "))
     data, attributes = getFileData(data_file)
     # print(data)
     clusters = computeClusters(data, k)
-    print("k-mean clusters: ", clusters)
+
+    print("\nK-mean Clusters: ")
+    for index, cluster in enumerate(clusters):
+        print(f"Cluster {index + 1}: {set(cluster)}")
 
 if __name__ == "__main__":
     main()
